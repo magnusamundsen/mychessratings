@@ -6,9 +6,6 @@ var _ = require('lodash');
 var RatingsList = React.createClass({
 
   render: function() {
-
-    console.log(this.props.players);
-
     var ratings = _.chain(this.props.players)
             .map(function(player) {
                 return { name: player.name, rating: player.ratings.glicko2.getRating(), gamecount: player.gamecount };
