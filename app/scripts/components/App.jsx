@@ -69,14 +69,48 @@ var App = React.createClass({
     this.firebasePlayersRef.off();
   },
 
+  isValidPlayer: function(player) {
+    if (player.name !== undefined && 
+        player.name.trim() !== "" &&
+        this.state.players[player.name] == undefined) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  isValidGame: function(game) {
+    if (game.white !== undefined && 
+        game.white.trim() !== "" &&
+        this.state.players[game.white] !== undefined &&
+        game.black !== undefined &&
+        game.black.trim() !== "" &&
+        this.state.players[game.black] !== undefined &&
+        game.result !== undefined &&
+        game.result.trim !== "") {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   addPlayer: function(player) {
-    this.firebasePlayersRef.push(player);
-    console.log("addPlayer", player, this.state.players);
+    if (this.isValidPlayer(player)) {
+      this.firebasePlayersRef.push(player);
+      console.log("addPlayer", player, this.state.players);
+    } else {
+      console.log("addPlayer failed. Invalid player.", player);
+    }
   },
 
   addGame: function(game) {
-    this.firebaseGamesRef.push(game);
-    console.log("addGame", game);
+    if (this.isValidGame(game)) {
+      this.firebaseGamesRef.push(game);
+      console.log("addGame", game);
+    } else {
+      console.log("addGame failed. Invalid game.", game);
+    }
+    
   },
 
   sortGames: function() {

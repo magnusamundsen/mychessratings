@@ -9,7 +9,7 @@ var RegisterGame = React.createClass({
   getInitialState: function() {
       return { white: "",
                black: "",
-               result: ""};
+               result: "1-0"};
   },
 
   handleWhiteChange: function(event) {
@@ -37,30 +37,51 @@ var RegisterGame = React.createClass({
     this.props.addGame(game); 
 
     this.setState( { white: "",
-                     black: "",
-                     result: "" });   
+                     black: ""
+                   });   
   },
 
   render: function() {
 
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="white">White</label>
-          <input type="text" ref="white" value={this.state.white} onChange={this.handleWhiteChange} />
 
-          <label htmlFor="black">Black</label>
-          <input type="text" ref="black" value={this.state.black} onChange={this.handleBlackChange} />
+      <form className="form-inline" onSubmit={this.handleSubmit}>
+      <fieldset>
 
-          <label htmlFor="result">Result</label>
-          <select ref="result" name="result" onChange={this.handleResultChange}>
-            <option key="white" value="1-0">White wins</option>
-            <option key="remis" value="0.5">Remis</option>
-            <option key="black" value="0-1">Black wins</option>
-          </select>
-          <button type="submit">Add</button>
-        </form>
-      </div>
+        <div className="form-group">
+          <div className="input-group col-md-12">
+            <div className="input-group-addon">White</div>
+            <input id="white" name="white" value={this.state.white} onChange={this.handleWhiteChange} className="form-control" placeholder="White player name" type="text" required="" />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <div className="input-group col-md-12">
+            <div className="input-group-addon">Black</div>
+            <input id="black" name="black" value={this.state.black} onChange={this.handleBlackChange} className="form-control" placeholder="Black player name" type="text" required="" />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <div className="input-group col-lg-14">
+            <select id="result" name="result" ref="result" className="form-control selectpicker" onChange={this.handleResultChange}>
+              <option key="white" value="1-0">White wins</option>
+              <option key="draw" value="0.5">Draw</option>
+              <option key="black" value="0-1">Black wins</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <div className="input-group col-lg-14">
+            <button id="addgame" name="addgame" type="submit" className="form-control btn btn-success">Add game</button>
+          </div>
+        </div>
+
+
+      </fieldset>
+    </form>
+ 
   );}
 
   

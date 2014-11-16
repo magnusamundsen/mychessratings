@@ -45,7 +45,7 @@ gulp.task('copy', function() {
 gulp.task('bundle', function () {
   var assets = $.useref.assets({searchPath: '{.tmp,app}'});
   var jsFilter = $.filter(['**/*.js']);
-  var cssFilter = $.filter(['**/*.css']);
+  var cssFilter = $.filter(['**/**.css']);
   var htmlFilter = $.filter(['*.html']);
 
   return gulp.src('app/*.html')
@@ -56,10 +56,6 @@ gulp.task('bundle', function () {
     .pipe($.uglify())
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
-    .pipe($.autoprefixer({
-      browsers: ['last 5 versions']
-    }))
-    .pipe($.minifyCss())
     .pipe(cssFilter.restore())
     .pipe(htmlFilter)
     .pipe($.htmlmin({collapseWhitespace: true}))

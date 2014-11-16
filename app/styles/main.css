@@ -6,6 +6,7 @@ body {
 
 .container {
     max-width: 730px;
+    margin-bottom: 75px;
 }
 
 .header {

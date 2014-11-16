@@ -33,12 +33,19 @@ var RegisterPlayer = React.createClass({
   render: function() {
 
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" ref="name" value={this.state.name} onChange={this.handleNameChange} />
-          <button type="submit">Add</button>
+
+      <form onSubmit={this.handleSubmit}>
+      <fieldset>
+
+        <div className="form-group">
+          <div className="input-group col-md-8">
+            <input id="playername" name="playername" type="text" value={this.state.name} onChange={this.handleNameChange} placeholder="Player name" className="form-control" required="" />          
+            <button type="submit" id="addplayer" name="addplayer" className="form-control btn btn-success">Add</button>
+          </div>
+        </div>
+
+        </fieldset>
         </form>
-      </div>
   );}
 
   
