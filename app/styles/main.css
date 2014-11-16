@@ -4,21 +4,45 @@ body {
     color: #333;
 }
 
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
-    font-size: 18px;
-    font-weight: 200;
-    line-height: 30px;
-    background-color: #eee;
-    border-radius: 6px;
-    padding: 60px;
+.container {
+    max-width: 730px;
 }
 
-.hero-unit h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+.header {
+    margin-bottom: 20px;    
+}
+
+.jumbotron {
+    padding-right: 100px !important;
+    padding-left: 100px !important;
+    padding-bottom: 10px !important;
+}
+
+.rating {
+    float: left !important;
+    margin-right: 15px !important;
+    margin-top: 6px !important;
+    font-size: 18px !important;
+    font-weight: 200 !important;
+    background-color: #3a87ad !important;
+}
+
+.rating-position {
+    margin-top: 10px;
+    float: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+    padding-right: 10px;
+}
+
+.number-of-games {
+    background-color: #BDBDBD !important;
+    margin-top: 8px !important;
+}
+
+.list-group {
+    font-size: 24px;
 }
 
 .browsehappy {

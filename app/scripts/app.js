@@ -5,5 +5,5 @@ var App = require('./components/App');
 
 React.renderComponent(
 	<App />,
-    document.getElementById('content')
+    document.getElementById('container')
 );

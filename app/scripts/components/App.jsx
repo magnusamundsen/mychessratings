@@ -2,8 +2,9 @@
 
 var React = require('react');
 var _ = require('lodash');
-var RegisterView = require('./RegisterView');
-var RatingsView = require('./RatingsView');
+var RatingsList = require('./RatingsList');
+var RegisterPlayer = require('./RegisterPlayer');
+var RegisterGame = require('./RegisterGame');
 
 var ReactFireMixin = require('reactfire');
 var Firebase = require('firebase');
@@ -40,12 +41,17 @@ var App = React.createClass({
     this.firebasePlayersRef = new Firebase("https://glaring-torch-1034.firebaseio.com/mychessratings/players");
     this.firebasePlayersRef.on("child_added", function(snapshot) {
       var player = snapshot.val();
-      player.ratings = {};
-      player.ratings.glicko2 = this.ranking.makePlayer( glicko2Settings.rating,
+
+      if (player !== undefined) {
+        player.ratings = {};
+        player.ratings.glicko2 = this.ranking.makePlayer( glicko2Settings.rating,
                                                         glicko2Settings.rd,
                                                         glicko2Settings.vol);
-      this.players[player.name] = player;
-      this.setState({ players: this.players });
+        this.players[player.name] = player;
+        this.setState({ players: this.players });  
+      }
+
+      
     }.bind(this));
 
     this.firebaseGamesRef = new Firebase("https://glaring-torch-1034.firebaseio.com/mychessratings/games");
@@ -54,7 +60,6 @@ var App = React.createClass({
       this.rateGame(game);
       this.games.push(game);
       this.setState({ games: this.games });
-      console.log("Game rated?", game.rated);
     }.bind(this));
   },
 
@@ -102,28 +107,39 @@ var App = React.createClass({
     return (game.rated != undefined && game.rated == true)
   },
 
-  rateGame: function(game) {
-    console.log("Rate single game", game);
+  countGame: function(player) {
+    if (this.state.players[player].gamecount == undefined) {
+      this.state.players[player].gamecount = 1;
+    } else {
+      this.state.players[player].gamecount++;
+    }
+  },
 
-    var matches = [];
+  rateGame: function(game) {
+    if (game !== undefined) {
+
+      var matches = [];
 
       if (game !== undefined && !this.isRated(game)) {
-        console.log("\t" + "Rating", game);
         var result = this.translateResult(game.result);
         var white = this.state.players[game.white].ratings.glicko2;
         var black = this.state.players[game.black].ratings.glicko2;
 
+        this.countGame(game.white);
+        this.countGame(game.black);
+
         matches.push([white, black, result]);
       }
       
-    this.ranking.updateRatings(matches);
-    game.rated = true;
+      this.ranking.updateRatings(matches);
+      game.rated = true;
 
-    this.setState({players: this.state.players});
+      this.setState({players: this.state.players}); 
+    }
+    
   },
 
   rateGames: function() {
-    console.log("Rate multiple games");
     var games = this.sortGames();
 
     // For each game, rate players based on result. Update player state.
@@ -132,7 +148,6 @@ var App = React.createClass({
     for (var index in games) {
       var game = games[index];
       if (game !== undefined && !this.isRated(game)) {
-        console.log("\t" + "Rating", game);
         var result = this.translateResult(game.result);
         var white = this.state.players[game.white].ratings.glicko2;
         var black = this.state.players[game.black].ratings.glicko2;
@@ -149,9 +164,25 @@ var App = React.createClass({
   render: function() {
 
     return (
-      <div>
-        <RatingsView rateGames={this.rateGames} players={this.state.players} />
-        <RegisterView addPlayer={this.addPlayer} addGame={this.addGame}/>
+      <div id="app">
+        <div className="header">
+          <h3 className="text-muted">Storebrand</h3>
+        </div>
+        <div className="jumbotron">
+          <div id="ratingsview">
+            <RatingsList players={this.state.players} />
+          </div>
+        </div>
+        <div className="row marketing">
+          <div className="col-lg-6">
+            <h4>Register game</h4>
+            <RegisterGame addGame={this.addGame}/>
+          </div>
+          <div className="col-lg-6">
+            <h4>Register player</h4>
+            <RegisterPlayer addPlayer={this.addPlayer}/>
+          </div>
+        </div>
       </div>
   );}
 
