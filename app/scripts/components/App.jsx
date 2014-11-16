@@ -43,6 +43,7 @@ var App = React.createClass({
       var player = snapshot.val();
 
       if (player !== undefined) {
+        player.gamecount = 0;
         player.ratings = {};
         player.ratings.glicko2 = this.ranking.makePlayer( glicko2Settings.rating,
                                                         glicko2Settings.rd,
