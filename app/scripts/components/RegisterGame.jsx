@@ -63,7 +63,7 @@ var RegisterGame = React.createClass({
         </div>
 
         <div className="form-group">
-          <div className="input-group col-lg-14">
+          <div className="input-group col-md-12">
             <select id="result" name="result" ref="result" className="form-control selectpicker" onChange={this.handleResultChange}>
               <option key="white" value="1-0">White wins</option>
               <option key="draw" value="0.5">Draw</option>
@@ -72,8 +72,9 @@ var RegisterGame = React.createClass({
           </div>
         </div>
 
+        <br/>
         <div className="form-group">
-          <div className="input-group col-lg-14">
+          <div className="input-group col-md-12">
             <button id="addgame" name="addgame" type="submit" className="form-control btn btn-success">Add game</button>
           </div>
         </div>

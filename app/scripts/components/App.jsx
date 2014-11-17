@@ -211,7 +211,7 @@ var App = React.createClass({
         <div className="row marketing">
           <div className="col-lg-6">
             <h4>Register game</h4>
-            <RegisterGame addGame={this.addGame}/>
+            <RegisterGame addGame={this.addGame} players={this.players} />
           </div>
           <div className="col-lg-6">
             <h4>Register player</h4>

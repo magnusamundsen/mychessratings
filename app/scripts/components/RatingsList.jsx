@@ -6,6 +6,7 @@ var _ = require('lodash');
 var RatingsList = React.createClass({
 
   render: function() {
+
     var ratings = _.chain(this.props.players)
             .map(function(player) {
                 return { name: player.name, rating: player.ratings.glicko2.getRating(), gamecount: player.gamecount };
@@ -25,13 +26,18 @@ var RatingsList = React.createClass({
             })
             .value();
 
-    return (
-      <div id="ratinglist">
-        <ul className="list-group">
-          {ratings}
-        </ul>        
-      </div>
-  );}
+    if (ratings.length === 0) {
+      return (<h1>Start playing!</h1>);
+    } else {
+      return (
+        <div id="ratinglist">
+          <ul className="list-group">
+            {ratings}
+          </ul>        
+        </div>);
+    }
+
+  }
 
   
 });
