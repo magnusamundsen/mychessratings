@@ -33,22 +33,24 @@ body {
 }
 
 .jumbotron {
-    padding-right: 100px !important;
-    padding-left: 100px !important;
-    padding-bottom: 10px !important;
+
+}
+
+.rating-player-name {
+    font-size: 36px;
 }
 
 .rating {
     float: left !important;
     margin-right: 15px !important;
-    margin-top: 6px !important;
+    margin-top: 13px !important;
     font-size: 18px !important;
     font-weight: 200 !important;
     background-color: #3a87ad !important;
 }
 
 .rating-position {
-    margin-top: 10px;
+    margin-top: 16px;
     float: left;
     font-size: 12px;
     font-weight: 700;
@@ -58,11 +60,15 @@ body {
 
 .number-of-games {
     background-color: #BDBDBD !important;
-    margin-top: 8px !important;
+    margin-top: 18px !important;
 }
 
 .list-group {
     font-size: 24px;
+}
+
+.chess-background {
+    
 }
 
 .browsehappy {

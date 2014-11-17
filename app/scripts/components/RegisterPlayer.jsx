@@ -7,7 +7,7 @@ var Firebase = require('firebase');
 var RegisterPlayer = React.createClass({
 
   getInitialState: function() {
-      return { name: "" };
+      return { name: "", username: "" };
   },
 
   handleUsernameChange: function(event) {
@@ -22,12 +22,13 @@ var RegisterPlayer = React.createClass({
     event.preventDefault();
 
     var player = {
+      "username": this.state.username,
       "name": this.state.name,
       "groups": {}
     };
 
     this.props.addPlayer(player);
-    this.setState({ name: "" });  
+    this.setState({ name: "", username: "" });  
   },
 
   render: function() {
@@ -38,7 +39,8 @@ var RegisterPlayer = React.createClass({
       <fieldset>
 
         <div className="form-group">
-          <div className="input-group col-md-8">
+          <div className="input-group input-group-lg">
+            <input id="username" name="username" type="text" value={this.state.username} onChange={this.handleUsernameChange} placeholder="E-mail" className="form-control" required="" />          
             <input id="playername" name="playername" type="text" value={this.state.name} onChange={this.handleNameChange} placeholder="Player name" className="form-control" required="" />          
             <button type="submit" id="addplayer" name="addplayer" className="form-control btn btn-success">Add</button>
           </div>

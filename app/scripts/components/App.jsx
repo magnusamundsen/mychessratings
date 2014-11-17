@@ -9,8 +9,9 @@ var RegisterGame = require('./RegisterGame');
 var ReactFireMixin = require('reactfire');
 var Firebase = require('firebase');
 var glicko2 = require ('glicko2');
+var elo = require('elorating');
 
-var glicko2Settings = {
+var ratingSettings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
   //       be tested to decide which value results in greatest predictive accuracy."
   tau : 0.5,
@@ -29,11 +30,11 @@ var App = React.createClass({
   getInitialState: function() {
     this.players = {};
     this.games = [];
-    this.ranking = new glicko2.Glicko2(glicko2Settings);
+    this.ranking = new glicko2.Glicko2(ratingSettings);
     
     return { players: {},
              games: [],
-             ranking: {}
+             ratingtype: "elo"
            };
   },
 
@@ -45,10 +46,12 @@ var App = React.createClass({
       if (player !== undefined) {
         player.gamecount = 0;
         player.ratings = {};
-        player.ratings.glicko2 = this.ranking.makePlayer( glicko2Settings.rating,
-                                                        glicko2Settings.rd,
-                                                        glicko2Settings.vol);
-        this.players[player.name] = player;
+        player.ratings.glicko2 = this.ranking.makePlayer( ratingSettings.rating,
+                                                        ratingSettings.rd,
+                                                        ratingSettings.vol);
+
+        player.ratings.elo = ratingSettings.rating;
+        this.players[player.username] = player;
         this.setState({ players: this.players });  
       }
 
@@ -70,9 +73,8 @@ var App = React.createClass({
   },
 
   isValidPlayer: function(player) {
-    if (player.name !== undefined && 
-        player.name.trim() !== "" &&
-        this.state.players[player.name] == undefined) {
+    if (this.state.players[player.username] == undefined &&
+        player.name.trim() !== "") {
       return true;
     } else {
       return false;
@@ -80,14 +82,10 @@ var App = React.createClass({
   },
 
   isValidGame: function(game) {
-    if (game.white !== undefined && 
-        game.white.trim() !== "" &&
-        this.state.players[game.white] !== undefined &&
-        game.black !== undefined &&
-        game.black.trim() !== "" &&
+    if (this.state.players[game.white] !== undefined &&
         this.state.players[game.black] !== undefined &&
         game.result !== undefined &&
-        game.result.trim !== "") {
+        game.result.trim() !== "") {
       return true;
     } else {
       return false;
@@ -150,23 +148,46 @@ var App = React.createClass({
     }
   },
 
+  rateGlicko2: function(game) {
+    var matches = [];
+    var result = this.translateResult(game.result);
+    var white = this.state.players[game.white].ratings.glicko2;
+    var black = this.state.players[game.black].ratings.glicko2;
+    matches.push([white, black, result]);
+    
+    this.ranking.updateRatings(matches);
+  },
+
+  rateElo: function(game) {
+
+    var ratingWhite = this.state.players[game.white].ratings.elo;
+    var ratingBlack = this.state.players[game.black].ratings.elo;
+
+    var expectedScore = elo.getExpectedScore(ratingWhite, ratingBlack);
+
+    var whiteResult = 0.5;
+    var blackResult = 0.5;
+
+    if (game.result == "1-0") {
+      whiteResult = 1;
+      blackResult = 0;
+    } else if (game.result == "0-1") {
+      whiteResult = 0;
+      blackResult = 1;
+    }
+
+    this.state.players[game.white].ratings.elo = elo.updateRating(ratingWhite, whiteResult, expectedScore.Ea);
+    this.state.players[game.black].ratings.elo = elo.updateRating(ratingBlack, blackResult, expectedScore.Eb);
+  },
+
   rateGame: function(game) {
-    if (game !== undefined) {
-
-      var matches = [];
-
-      if (game !== undefined && !this.isRated(game)) {
-        var result = this.translateResult(game.result);
-        var white = this.state.players[game.white].ratings.glicko2;
-        var black = this.state.players[game.black].ratings.glicko2;
-
-        this.countGame(game.white);
-        this.countGame(game.black);
-
-        matches.push([white, black, result]);
-      }
+    if (game !== undefined && !this.isRated(game)) {
+      this.countGame(game.white);
+      this.countGame(game.black);
       
-      this.ranking.updateRatings(matches);
+      this.rateGlicko2(game);
+      this.rateElo(game);
+
       game.rated = true;
 
       this.setState({players: this.state.players}); 
@@ -174,6 +195,7 @@ var App = React.createClass({
     
   },
 
+  /*
   rateGames: function() {
     var games = this.sortGames();
 
@@ -195,7 +217,8 @@ var App = React.createClass({
     this.ranking.updateRatings(matches);
     this.setState({players: this.state.players});
   },
-  
+  */
+
   render: function() {
 
     return (
@@ -204,14 +227,16 @@ var App = React.createClass({
           <h3 className="text-muted">Storebrand</h3>
         </div>
         <div className="jumbotron">
+
           <div id="ratingsview">
-            <RatingsList players={this.state.players} />
+            <RatingsList players={this.state.players} ratingtype={this.state.ratingtype}/>
           </div>
         </div>
+
         <div className="row marketing">
           <div className="col-lg-6">
             <h4>Register game</h4>
-            <RegisterGame addGame={this.addGame} players={this.players} />
+            <RegisterGame addGame={this.addGame} players={this.state.players} />
           </div>
           <div className="col-lg-6">
             <h4>Register player</h4>
@@ -221,7 +246,6 @@ var App = React.createClass({
       </div>
   );}
 
-  
 });
 
 module.exports = App;

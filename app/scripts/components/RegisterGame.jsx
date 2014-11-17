@@ -3,6 +3,7 @@
 var React = require('react');
 var ReactFireMixin = require('reactfire');
 var Firebase = require('firebase');
+var _ = require('lodash');
 
 var RegisterGame = React.createClass({
 
@@ -43,42 +44,50 @@ var RegisterGame = React.createClass({
 
   render: function() {
 
-    return (
+    var players = _.chain(this.props.players)
+            .sortBy(function(player) {
+                return player.name;
+            })
+            .map(function(player, index) {
+              return <option key={index} value={player.username}>{player.name}</option>
+            })
+            .value();
 
-      <form className="form-inline" onSubmit={this.handleSubmit}>
+    return (
+      <form onSubmit={this.handleSubmit}>
       <fieldset>
 
         <div className="form-group">
-          <div className="input-group col-md-12">
+
+          <div className="input-group input-group-lg">
             <div className="input-group-addon">White</div>
-            <input id="white" name="white" value={this.state.white} onChange={this.handleWhiteChange} className="form-control" placeholder="White player name" type="text" required="" />
+            <select id="white" name="white" ref="white" className="form-control selectpicker" onChange={this.handleWhiteChange}>
+              <option value=""></option>
+              {players}
+            </select>
           </div>
-        </div>
 
-        <div className="form-group">
-          <div className="input-group col-md-12">
+          <div className="input-group input-group-lg">
             <div className="input-group-addon">Black</div>
-            <input id="black" name="black" value={this.state.black} onChange={this.handleBlackChange} className="form-control" placeholder="Black player name" type="text" required="" />
+            <select id="black" name="black" ref="black" className="form-control selectpicker" onChange={this.handleBlackChange}>
+              <option value=""></option>
+              {players}
+            </select>
           </div>
-        </div>
 
-        <div className="form-group">
-          <div className="input-group col-md-12">
+          <div className="input-group input-group-lg">
+            <div className="input-group-addon">Result</div>
             <select id="result" name="result" ref="result" className="form-control selectpicker" onChange={this.handleResultChange}>
               <option key="white" value="1-0">White wins</option>
               <option key="draw" value="0.5">Draw</option>
               <option key="black" value="0-1">Black wins</option>
             </select>
           </div>
-        </div>
-
-        <br/>
-        <div className="form-group">
-          <div className="input-group col-md-12">
+          
+          <div className="input-group-lg">
             <button id="addgame" name="addgame" type="submit" className="form-control btn btn-success">Add game</button>
           </div>
         </div>
-
 
       </fieldset>
     </form>

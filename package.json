@@ -13,7 +13,8 @@
     "elo-rank": "^0.2.2",
     "reactfire": "0.4.0",
     "firebase": "2.0.3",
-    "lodash": "^2.4.1"
+    "lodash": "^2.4.1",
+    "elorating": "^1.0.1"
   },
   "devDependencies": {
     "browserify": "^6.1.0",
