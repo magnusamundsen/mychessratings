@@ -227,7 +227,6 @@ var App = React.createClass({
           <h3 className="text-muted">Storebrand</h3>
         </div>
         <div className="jumbotron">
-
           <div id="ratingsview">
             <RatingsList players={this.state.players} ratingtype={this.state.ratingtype}/>
           </div>
