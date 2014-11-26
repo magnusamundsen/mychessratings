@@ -5,6 +5,7 @@ var _ = require('lodash');
 var RatingsList = require('./RatingsList');
 var RegisterPlayer = require('./RegisterPlayer');
 var RegisterGame = require('./RegisterGame');
+var GamesList= require('./GamesList');
 
 var ReactFireMixin = require('reactfire');
 var Firebase = require('firebase');
@@ -195,41 +196,21 @@ var App = React.createClass({
     
   },
 
-  /*
-  rateGames: function() {
-    var games = this.sortGames();
-
-    // For each game, rate players based on result. Update player state.
-    var matches = [];
-
-    for (var index in games) {
-      var game = games[index];
-      if (game !== undefined && !this.isRated(game)) {
-        var result = this.translateResult(game.result);
-        var white = this.state.players[game.white].ratings.glicko2;
-        var black = this.state.players[game.black].ratings.glicko2;
-        game.rated = true;
-
-        matches.push([white, black, result]);
-      }
-      
-    }
-    this.ranking.updateRatings(matches);
-    this.setState({players: this.state.players});
-  },
-  */
-
   render: function() {
 
     return (
       <div id="app">
+
         <div className="header">
           <h3 className="text-muted">Storebrand</h3>
         </div>
-        <div className="jumbotron">
-          <div id="ratingsview">
-            <RatingsList players={this.state.players} ratingtype={this.state.ratingtype}/>
-          </div>
+
+        <div>
+            <div className="jumbotron">
+              <div className="ratings-view">
+                <RatingsList players={this.state.players} ratingtype={this.state.ratingtype}/>
+              </div>
+            </div>
         </div>
 
         <div className="row marketing">
@@ -237,11 +218,20 @@ var App = React.createClass({
             <h4>Register game</h4>
             <RegisterGame addGame={this.addGame} players={this.state.players} />
           </div>
+
           <div className="col-lg-6">
             <h4>Register player</h4>
             <RegisterPlayer addPlayer={this.addPlayer}/>
           </div>
         </div>
+
+        <div className="col-lg-5">
+            <div id="games-view">
+              <GamesList players={this.state.players} games={this.state.games}/>
+            </div>
+        </div>
+
+
       </div>
   );}
 

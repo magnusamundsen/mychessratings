@@ -11,7 +11,7 @@
     display: none !important;
   }
 
-  .rating-position {
+  .list-position {
     margin-right: 5px !important;
   }
 }
@@ -25,7 +25,7 @@ body {
 
 .background-image {
     background-image: url('../images/chesspiece.png');
-    background-position: left top 30px;
+    background-position: left top 80px;
     background-repeat: no-repeat;
 }
 
@@ -51,11 +51,18 @@ body {
     background-color: #3a87ad !important;
 }
 
-.rating-position {
-    margin-top: 16px;
+.list-position {
+    margin-top: 16px !important;
     float: left;
     font-size: 12px;
     font-weight: 700;
+    color: #777;
+    padding-right: 10px;
+}
+
+.timestamp {
+    font-size: 10px;
+    font-weight: 200;
     color: #777;
     padding-right: 10px;
 }
@@ -65,8 +72,20 @@ body {
     margin-top: 18px !important;
 }
 
-.list-group {
+.winner {
+    color: #5cb85c;
+}
+
+.draw {
+    color: #f0ad4e;
+}
+
+.rating-list-group {
     font-size: 24px;
+}
+
+.list-group-item-success {
+    color: #000 !important;
 }
 
 .browsehappy {

@@ -22,9 +22,20 @@ var RatingsList = React.createClass({
             })
             .map(function(player, index) {
               var index = index + 1;
-              
-              return <li key={index} className="list-group-item">
-                        <span className="rating-position">{index}</span>
+              var listGroupItemClass = "list-group-item";
+              var badgeClass = "badge";
+
+              if (player.gamecount == 0) {
+                listGroupItemClass  = listGroupItemClass + " disabled";
+                badgeClass = badgeClass + " badge-disabled";
+              }
+
+              if (index == 1) {
+                listGroupItemClass = listGroupItemClass + " list-group-item-success";
+              }
+
+              return <li key={index} className={listGroupItemClass}>
+                        <span className="list-position">{index}</span>
                         <span className="badge rating">{player.rating}</span> 
                         <span className="rating-player-name">{player.name}</span>
                         <span className="badge number-of-games">{player.gamecount}</span>
@@ -37,7 +48,7 @@ var RatingsList = React.createClass({
     } else {
       return (
         <div id="ratinglist">
-          <ul className="list-group">
+          <ul className="list-group rating-list-group">
             {ratings}
           </ul>        
         </div>);
