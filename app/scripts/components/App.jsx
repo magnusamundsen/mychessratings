@@ -40,7 +40,7 @@ var App = React.createClass({
   },
 
   componentWillMount: function() {
-    this.firebasePlayersRef = new Firebase("https://glaring-torch-1034.firebaseio.com/mychessratings/players");
+    this.firebasePlayersRef = new Firebase("https://YOUR FIREBASE URL HERE/mychessratings/players");
     this.firebasePlayersRef.on("child_added", function(snapshot) {
       var player = snapshot.val();
 
@@ -59,7 +59,7 @@ var App = React.createClass({
       
     }.bind(this));
 
-    this.firebaseGamesRef = new Firebase("https://glaring-torch-1034.firebaseio.com/mychessratings/games");
+    this.firebaseGamesRef = new Firebase("https://YOUR FIREBASE URL HERE/mychessratings/games");
     this.firebaseGamesRef.on("child_added", function(snapshot) {
       var game = snapshot.val();
       this.rateGame(game);
